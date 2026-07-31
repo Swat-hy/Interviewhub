@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../utils/api.js';
+import { toast } from 'react-toastify';
 
 const AddExperience = () => {
   const [step, setStep] = useState(1);
@@ -57,12 +58,12 @@ const AddExperience = () => {
 
     try {
       await api.post('/experiences', payload);
-      alert('Interview experience submitted successfully! It is now pending moderation approval.');
+      toast.success('Interview experience submitted successfully! It is now pending moderation approval.');
       navigate('/'); // Redirect back to Home route
     } catch (error) {
       console.error('Submission error:', error);
       const errorMsg = error.response?.data?.message || 'Error submitting experience.';
-      alert(errorMsg);
+      toast.error(errorMsg);
     }
   };
 

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext.jsx';
 import api from '../utils/api.js';
+import { toast } from 'react-toastify';
 
 const ExperienceDetails = () => {
   const { id } = useParams();
@@ -36,16 +37,20 @@ const ExperienceDetails = () => {
   // Handle Liking / Unliking Toggle
   const handleLike = async () => {
     if (!user) {
-      alert('Please log in to like this post.');
+      toast.warn('Please log in to like this post.');
       return;
     }
 
     try {
       const response = await api.post(`/experiences/${id}/like`);
-      setExperience(response.data);
+      if (response.data && response.data.companyName) {
+        setExperience(response.data);
+      } else if (response.data && response.data.likes) {
+        setExperience((prev) => ({ ...prev, likes: response.data.likes }));
+      }
     } catch (err) {
       console.error('Error toggling like:', err);
-      alert(err.response?.data?.message || 'Error liking experience.');
+      toast.error(err.response?.data?.message || 'Error liking experience.');
     }
   };
 
@@ -54,7 +59,7 @@ const ExperienceDetails = () => {
     e.preventDefault();
     if (!newComment.trim()) return;
     if (!user) {
-      alert('Please log in to comment.');
+      toast.warn('Please log in to comment.');
       return;
     }
 
@@ -65,7 +70,7 @@ const ExperienceDetails = () => {
       setNewComment('');
     } catch (err) {
       console.error('Error submitting comment:', err);
-      alert(err.response?.data?.message || 'Error posting comment.');
+      toast.error(err.response?.data?.message || 'Error posting comment.');
     } finally {
       setSubmittingComment(false);
     }
@@ -148,7 +153,11 @@ const ExperienceDetails = () => {
                   {experience.jobRole}
                 </span>
                 <span className="text-sm text-gray-400">
-                  Published on {new Date(experience.createdAt).toLocaleDateString()}
+                  Published on {
+                    experience?.createdAt && !isNaN(new Date(experience.createdAt))
+                      ? new Date(experience.createdAt).toLocaleDateString('en-US', { month: 'numeric', day: 'numeric', year: 'numeric' })
+                      : 'Recently'
+                  }
                 </span>
               </div>
             </div>
@@ -264,7 +273,7 @@ const ExperienceDetails = () => {
             <button
               onClick={() => {
                 navigator.clipboard.writeText(window.location.href);
-                alert('Link copied to clipboard!');
+                toast.success('Link copied to clipboard!');
               }}
               className="flex items-center space-x-2 text-sm font-semibold bg-gray-50 text-gray-600 px-4 py-2 rounded-md hover:bg-gray-100 transition cursor-pointer"
             >

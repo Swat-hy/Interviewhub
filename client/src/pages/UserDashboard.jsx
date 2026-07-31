@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext.jsx';
 import { Link } from 'react-router-dom';
 import api from '../utils/api.js';
+import { toast } from 'react-toastify';
 
 const UserDashboard = () => {
   const { user, loading } = useAuth();
@@ -91,7 +92,7 @@ const UserDashboard = () => {
   const handleProfileSave = (e) => {
     e.preventDefault();
     setIsEditing(false);
-    alert('Profile details cached in current local view!');
+    toast.success('Profile details cached in current local view!');
   };
 
   // Student deletion of own experience
@@ -100,10 +101,10 @@ const UserDashboard = () => {
       try {
         await api.delete(`/experiences/${id}`);
         setMyPosts(myPosts.filter((post) => post._id !== id));
-        alert('Experience deleted successfully!');
+        toast.success('Experience deleted successfully!');
       } catch (error) {
         console.error('Error deleting experience:', error);
-        alert(error.response?.data?.message || 'Error deleting experience.');
+        toast.error(error.response?.data?.message || 'Error deleting experience.');
       }
     }
   };
@@ -113,10 +114,10 @@ const UserDashboard = () => {
     try {
       await api.put(`/admin/approve/${id}`);
       setPendingPosts(pendingPosts.filter((post) => post._id !== id));
-      alert('Interview experience approved and published successfully!');
+      toast.success('Interview experience approved and published successfully!');
     } catch (error) {
       console.error('Approval error:', error);
-      alert(error.response?.data?.message || 'Error approving experience.');
+      toast.error(error.response?.data?.message || 'Error approving experience.');
     }
   };
 
@@ -126,10 +127,10 @@ const UserDashboard = () => {
       try {
         await api.delete(`/admin/reject/${id}`);
         setPendingPosts(pendingPosts.filter((post) => post._id !== id));
-        alert('Experience rejected and removed.');
+        toast.success('Experience rejected and removed.');
       } catch (error) {
         console.error('Rejection error:', error);
-        alert(error.response?.data?.message || 'Error rejecting experience.');
+        toast.error(error.response?.data?.message || 'Error rejecting experience.');
       }
     }
   };

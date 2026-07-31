@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext.jsx';
+import { toast } from 'react-toastify';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -13,12 +14,12 @@ const Login = () => {
     try {
       // Call AuthContext login helper which issues the API request
       await login(email, password);
-      alert('Login successful!');
+      toast.success('Login successful!');
       navigate('/dashboard');
     } catch (error) {
       console.error('Login error:', error);
       const errorMsg = error.response?.data?.message || 'Login failed. Invalid credentials.';
-      alert(errorMsg);
+      toast.error(errorMsg);
     }
   };
 

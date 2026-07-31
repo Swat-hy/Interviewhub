@@ -132,11 +132,13 @@ export const toggleLike = async (req, res) => {
     }
 
     await experience.save();
-    res.status(200).json({
-      message: index === -1 ? 'Liked successfully' : 'Unliked successfully',
-      likesCount: experience.likes.length,
-      likes: experience.likes
-    });
+
+    // Fetch the updated populated document
+    const updatedExperience = await Experience.findById(id)
+      .populate('user', 'fullName email college graduationYear')
+      .populate('comments.user', 'fullName email college');
+
+    res.status(200).json(updatedExperience);
   } catch (error) {
     console.error('Error toggling like:', error);
     res.status(500).json({ message: 'Server error while toggling like.' });

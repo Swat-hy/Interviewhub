@@ -1,4 +1,4 @@
-g# InterviewHub
+# InterviewHub
 
 InterviewHub is a modern, responsive web application designed for students and professionals to share, discover, and moderate real-world technical and behavioral interview experiences. It offers structured timelines for interview rounds, real-time search queries, dynamic lateral filters, and a secure moderation workflow for administrators.
 

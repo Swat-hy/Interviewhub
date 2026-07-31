@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { toast } from 'react-toastify';
 import './Dashboard.css';
 
 const Dashboard = () => {
@@ -54,7 +55,7 @@ const Dashboard = () => {
       const data = await response.json();
 
       if (response.ok) {
-        alert(data.message || 'Question added successfully!');
+        toast.success(data.message || 'Question added successfully!');
         // Reset Form Fields
         setTitle('');
         setDescription('');
@@ -63,10 +64,10 @@ const Dashboard = () => {
         // Refetch questions list instantly
         fetchQuestions();
       } else {
-        alert(data.message || 'Failed to add question.');
+        toast.error(data.message || 'Failed to add question.');
       }
     } catch (err) {
-      alert(`Error adding question: ${err.message}`);
+      toast.error(`Error adding question: ${err.message}`);
     }
   };
 

@@ -1,6 +1,8 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext.jsx';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import Navbar from './components/Navbar.jsx';
 import Home from './pages/Home.jsx';
 import Login from './pages/Login.jsx';
@@ -70,6 +72,9 @@ function AppContent() {
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </main>
+        
+        {/* React Toastify notifications container */}
+        <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} />
       </div>
     </Router>
   );

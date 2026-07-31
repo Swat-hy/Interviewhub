@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext.jsx';
+import { toast } from 'react-toastify';
 
 const Register = () => {
   const [name, setName] = useState('');
@@ -24,12 +25,12 @@ const Register = () => {
         graduationYear: parseInt(gradYear),
         aboutMe
       });
-      alert('Registration successful!');
+      toast.success('Registration successful!');
       navigate('/dashboard');
     } catch (error) {
       console.error('Registration error:', error);
       const errorMsg = error.response?.data?.message || 'Registration failed.';
-      alert(errorMsg);
+      toast.error(errorMsg);
     }
   };
 
